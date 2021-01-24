@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+	<mvc:annotation-driven />
+	<context:component-scan
+		base-package="com.nerdhead.restful" />
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	
+	
+	
+	
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- IOC 에서 호출되는 mapping을 제어하기 위함 -->
+ 	<mvc:interceptors>
+		<mvc:interceptor>
+		<!-- mvc:mapping + bean은 필수, mvc:exclude-mapping 선택 -->
+		<!--1. 인터셉터가 적용 될 url -->
+			<mvc:mapping path="/**"/>
+		<!--2. 인터셉터가 제외 될 url-->
+			<mvc:exclude-mapping path="/**" />
+		<!--3. interceptor가 동작 및 판단 할 클래스를 bean으로 등록 -->
+			<bean class="com.nerdhead.restful.interceptor.Interceptor"></bean>
+		</mvc:interceptor>
+
+
+		<bean id="webContentInterceptor"
+			class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+			<property name="cacheSeconds" value="0" />
+			<property name="useExpiresHeader" value="true" />
+			<property name="useCacheControlHeader" value="true" />
+			<property name="useCacheControlNoStore" value="true" />
+			<property name="cacheMappings">
+				<props>
+					<prop key="/images/**">86400</prop>
+				</props>
+			</property>
+		</bean>
+	</mvc:interceptors>
+</beans>
