@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Jackson ObjectMapper 역직렬화 시 Collection, Map 안의 POJO가 LinkedHashMap가 되는 문제 해결을 위한 Helper Class<br>
  * Support : Collection, Map, POJO, 기본 타입<br>
  * 
- * @version 1.0.0 ( 2021.01.25 ~ )
+ * @version 1.0.0 ( 2021.01.25 ~ 2021.01.26)
  * @author NERDHEAD ( JS.Yanagi )
  * @see <a href="https://gist.github.com/NERDHEAD/67c5368f569223f5d04ee547886562b2">gist.github document</a>
  * @see #wrapData(data)
