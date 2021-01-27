@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nerdhead.restful.dto.TestDto;
+import com.nerdhead.restful.util.HttpClientHelper;
 import com.nerdhead.restful.util.JacksonHelper;
 
 
@@ -102,7 +103,7 @@ public class SampleController {
 		
 	}
 	
-	@SuppressWarnings({ "finally", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@ResponseBody
 	@RequestMapping(value = "test/wrapData2.do",produces="application/json;charset=UTF-8")
 	public String test_wrapData2(){
@@ -142,6 +143,17 @@ public class SampleController {
 		
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "test/clientHelper.do")
+	public String test_clientHelper() {
+		HttpClientHelper cHelper = new HttpClientHelper("1234", "URL");
+		
+		cHelper.setCheckOnloadOption();
+		cHelper.method(null).data().request();
+		
+		
+		return "Hello";
+	}
 }
 
 
