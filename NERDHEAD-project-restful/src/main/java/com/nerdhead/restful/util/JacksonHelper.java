@@ -43,10 +43,16 @@ public class JacksonHelper {
 	 * @param <T>
 	 * @param data
 	 * @return
+	 * @throws IOException 
 	 * @throws JsonProcessingException 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public JSONObject wrapData(Object data) throws JsonProcessingException{
+	public JSONObject wrapData(Object data) throws JsonProcessingException {
+		// Process 0 : Null Check
+		if(data==null) {
+			return nullData();
+		}
+		
 		// Process 1-1 : Collection Check
 		if (data instanceof Collection<?>) {
 			JSONArray list=new JSONArray();
@@ -76,14 +82,22 @@ public class JacksonHelper {
 	
 	//TODO
 	@SuppressWarnings("unchecked")
-	public Object unwrapData(JSONObject data) 
-			throws JsonParseException, JsonMappingException, ClassNotFoundException, IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public Object unwrapData(Map<String, Object> data) 
+			throws JsonParseException, JsonMappingException, ClassNotFoundException, 
+			IOException, InstantiationException, IllegalAccessException, IllegalArgumentException, 
+			InvocationTargetException, NoSuchMethodException, SecurityException {
 		String dataStr;
 		String className;
 		Class<?> clazz;
 		
 		dataStr		= (String) data.get(D);					//직렬화 된 데이터
 		className	= (String) data.get(T);					//데이터의 Class Type
+		
+		// Process 0 : Null Check
+		if(dataStr.equals("null")&&className.equals(Void.TYPE.getName())) {
+			return null;
+		}
+		
 		clazz		= Class.forName(className);
 		
 		// Process 1-1 : Collection Check
@@ -122,6 +136,17 @@ public class JacksonHelper {
 	}
 	
 	
+	//DOTO 
+	/**
+	 * 
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	public JSONObject nullData() throws JsonProcessingException {
+		return _wrapData("null", Void.TYPE);
+	}
+	
+	
 	
 	
 	
@@ -132,6 +157,7 @@ public class JacksonHelper {
 	 * @param data
 	 * @param clazz
 	 * @return
+	 * @throws IOException 
 	 * @throws JsonProcessingException
 	 */
 	private JSONObject _wrapData(Object data, Class<?> clazz) throws JsonProcessingException {
@@ -139,15 +165,22 @@ public class JacksonHelper {
 		String dataStr;
 		String className;
 		
-		dataStr		= mapper.writeValueAsString(data);			//데이터 직렬화
-		className	= clazz.getName();							//데이터의 Class Type
-		//	CanonicalName은 Class.forName()에 사용 할 수 없음.
-		//	className	= data.getClass().getCanonicalName();
+		try {
+			dataStr		= mapper.writeValueAsString(data);
+			//데이터 직렬화
+			className	= clazz.getName();		//데이터의 Class Type
+			//	CanonicalName은 Class.forName()에 사용 할 수 없음.
+			//	className	= data.getClass().getCanonicalName();
+			
+			map.put(D, dataStr);
+			map.put(T, className);
+			
+			return new JSONObject(map);
 		
-		map.put(D, dataStr);
-		map.put(T, className);
-		
-		return new JSONObject(map);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 	
 	
@@ -163,7 +196,13 @@ public class JacksonHelper {
 	 * @throws NoSuchMethodException 
 	 */
 	private Object _unwrapData(String dataStr, String className) 
-			throws JsonParseException, JsonMappingException, ClassNotFoundException, IOException, NoSuchMethodException{
-		return mapper.readValue(dataStr, Class.forName(className));
+			throws JsonParseException, JsonMappingException, IOException, NoSuchMethodException, ClassNotFoundException{
+		
+		try {
+			return mapper.readValue(dataStr, Class.forName(className));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new ClassNotFoundException(this.getClass().getName()+"._unwrapData : "+className+" does not exist!!!");
+		} 
 	}
 }
