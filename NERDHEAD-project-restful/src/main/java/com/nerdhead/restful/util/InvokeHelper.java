@@ -1,7 +1,10 @@
 package com.nerdhead.restful.util;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO : MethodList 가져오는 기능 추가 할 것
 
@@ -59,15 +62,45 @@ public class InvokeHelper {
 			//result		: method 실행 후 return 결과
 			Object result;
 			try {
-				// Process 1 : Null check
-				if(varargs==null) {
-					method = service.getClass().getDeclaredMethod(methodStr);
-					result = method.invoke(service);
-				}else {
-					parameterTypes=getParameterTypes(varargs);
-					method = service.getClass().getDeclaredMethod(methodStr, parameterTypes);
-					result = method.invoke(service, varargs);
+				List<Method> methods = new ArrayList<>();
+				for (Method m : service.getClass().getDeclaredMethods()) {
+					if (m.getName().equals(methodStr)) {
+						methods.add(m);
+					}
 				}
+				
+				if (methods.size() == 1) {
+					method = methods.get(0);
+					if (varargs == null) {
+						result = method.invoke(service);
+					} else {
+						if (method.isVarArgs()) {
+							result = method.invoke(service, new Object[] {makeVarArgs(varargs)});
+						} else {
+							result = method.invoke(service, varargs);
+						}
+					}
+					
+				} else if (methods.size() > 1) {
+					// TODO 오버로딩에 대해 적합한 인재상...아니 메서드를 찾기
+					throw new IllegalArgumentException();
+				} else {
+					// 해당 메서드가 없을 경우 메서드가 없다고 예외!
+					throw new NoSuchMethodException(); // Catch문으로 보내버려!
+				}
+				
+				
+				
+				// TODO : methods로 들고와서 기본적으로 처리
+				//			같은이름의 method(overload)일경우 기존 로직에서 parameterType 추출해서 사용할것.
+				// Process 1 : Null check
+				/*
+				 * if(varargs==null) { method = service.getClass().getDeclaredMethod(methodStr);
+				 * result = method.invoke(service); }else {
+				 * parameterTypes=getParameterTypes(varargs); method =
+				 * service.getClass().getDeclaredMethod(methodStr, parameterTypes); result =
+				 * method.invoke(service, varargs); }
+				 */
 				
 				if(method.getReturnType().equals(Void.TYPE)) {
 					return Void.TYPE;
@@ -87,7 +120,7 @@ public class InvokeHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
+				// TODO Auto-generated catch block 
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				// TODO Auto-generated catch block
@@ -97,7 +130,36 @@ public class InvokeHelper {
 			
 			return null;
 		}
+		//String[]
+		//Object[] <- {String,String,Sting...}
+		private Object[] makeVarArgs(Object[] varargs) {
+			if(varargs==null||varargs.length<1) {
+				return null;
+			}
+			
+			Object[] result=makeVarArgs(varargs[0].getClass(), varargs);
+			
+			return result;
+		}
 		
+		
+		@SuppressWarnings("unchecked")
+		private<T> T[] makeVarArgs(Class<T> clazz, Object[] varargs) {
+			T[] result=(T[]) Array.newInstance(clazz, varargs.length);
+
+			for (int i = 0; i < result.length; i++) {
+				result[i]=(T)varargs[i];
+			}
+			
+			System.err.println("@@@@@@@ resultType : "+result.getClass().getName());
+		
+			
+			
+			return result;
+			
+		}
+		
+
 		private Class<?>[] getParameterTypes(Object[] varags) {
 			Class<?>[] parameterTypes=new Class[varags.length];
 			for (int i = 0; i < varags.length; i++) {
