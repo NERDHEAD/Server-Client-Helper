@@ -38,6 +38,9 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+	
+	
+	
 
 	<!-- 모든 얘들을 트랜잭션 걸게 하는 소스처리 -->
 	<tx:advice id="txAdvice"

@@ -20,7 +20,17 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 	
+	<bean class="com.nerdhead.restful.util.HttpClientHelper">
+		<constructor-arg name="KEY" value="1234"/>
+		<constructor-arg name="URL" value="http://localhost:8095/NERDHEAD-project-restful/test/"/>
+	</bean>
 	
+	<bean class="com.nerdhead.restful.util.HttpServerHelper">
+		<constructor-arg name="service" ref="serverService"/>
+		<constructor-arg name="KEY" value="1234"/>
+	</bean>
+
+	<!-- <bean id="serverService" class="com.nerdhead.restful.model.service.ServerService"/> -->
 	
 	
 	
