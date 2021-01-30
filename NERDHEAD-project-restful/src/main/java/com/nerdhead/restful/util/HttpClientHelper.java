@@ -126,6 +126,10 @@ public class HttpClientHelper {
 				response 			= httpClient.execute(request);
 				// TODO responseStatus 예외처리
 				responseStatus 		= response.getStatusLine().getStatusCode();
+				if(responseStatus!=200) {
+					throw new IOException("StatusCode : "+ responseStatus);
+				}
+				
 				responseData_str 	= EntityUtils.toString(response.getEntity());
 				responseData		= (JSONObject)(new JSONParser().parse(responseData_str));
 				resultData			= generateResult(responseData);
