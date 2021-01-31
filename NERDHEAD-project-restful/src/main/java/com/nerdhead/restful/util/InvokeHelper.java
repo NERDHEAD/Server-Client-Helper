@@ -187,9 +187,7 @@ public class InvokeHelper {
 			
 			for (int i = 0; i < varargs.length; i++) {
 				// Step 3:
-				// 배열에 값집어넣기(result[i] = varargs[i];), int[]처럼 기본형 배열인지 Object[]인지 알수없어 리플렉션 이용
-				Method setMethod = Array.class.getDeclaredMethod("set", Object.class, int.class, Object.class);
-				setMethod.invoke(null, result, i, varargs[i]);
+				Array.set(result, i, varargs[i]);
 			}
 			
 			System.err.println("@@@@@@@ resultType : "+result.getClass().getName());
