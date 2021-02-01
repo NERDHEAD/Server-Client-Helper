@@ -21,7 +21,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//TODO : method 상세 명세 주석 필요
 
+/**
+ * nerdhead-archetype-RESTful이 적용된 RESTful 서버와 통신 하기 위한 Class<br>
+ * Bean에 target url, key를 등록 하여 사용<br>
+ * 
+ * @version 1.0.0 ( 2021.01.25 ~ 2021.01.28)
+ * @author NERDHEAD ( JS.Yanagi )
+ * @see #request(path)
+ * @see #requestData(path, data)
+ *
+ */
 public class ApiClientHelper {
 	private final String URL;
 	private final String KEY;

@@ -14,6 +14,18 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+//TODO : method 상세 명세 주석 필요
+
+/**
+* httpClientHelper에서의 요청을 처리하기 위한 Class<br>
+* Bean에 target service, key를 등록 하여 사용<br>
+* 
+* @version 1.0.0 ( 2021.01.25 ~ 2021.01.31)
+* @author NERDHEAD ( JS.Yanagi )
+* @see #method(path)
+* @see #data(path, data)
+*
+*/
 public  class HttpServerHelper<T> {
 	private final HttpServiceHelper<T> service;
 

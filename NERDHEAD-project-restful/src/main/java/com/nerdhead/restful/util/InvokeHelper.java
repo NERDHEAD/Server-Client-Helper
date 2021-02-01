@@ -9,9 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO : MethodList 가져오는 기능 추가 할 것
+//TODO : 주석 추가 할 것
 
 
-
+/**
+ * Service.method.parameter로 구현
+ * 
+ * @version 0.0.3 ( 2021.01.25 ~ )
+ * @author NERDHEAD ( JS.Yanagi )
+ * @see #clazz(service)
+ * @see #method(methodStr)
+ * @see #parameter(parameter)
+ * @see #run()
+ *
+ */
 public class InvokeHelper {
 
 	public <T> InvokeClassHelper<T> clazz(T service) {
