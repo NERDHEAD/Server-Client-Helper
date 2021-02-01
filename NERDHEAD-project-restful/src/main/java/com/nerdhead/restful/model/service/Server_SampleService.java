@@ -3,7 +3,7 @@ package com.nerdhead.restful.model.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServerService {
+public class Server_SampleService {
 
 	public String test_String(String data) {
 		return data + "-test-test-test-test-test-test-";

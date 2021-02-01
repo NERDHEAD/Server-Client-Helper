@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.nerdhead.restful.util.HttpClientHelper;
 @Service
-public class ClientService {
+public class Client_SampleService {
 	@Autowired
 	private HttpClientHelper helper;
 	

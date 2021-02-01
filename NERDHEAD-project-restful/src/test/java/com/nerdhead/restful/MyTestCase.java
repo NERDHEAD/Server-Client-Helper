@@ -9,12 +9,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nerdhead.restful.model.service.ServerService;
+import com.nerdhead.restful.model.service.Server_SampleService;
 import com.nerdhead.restful.util.InvokeHelper;
 
 public class MyTestCase {
 	
-	@Autowired ServerService serverService = new ServerService();
+	@Autowired Server_SampleService serverService = new Server_SampleService();
 	
 	@Test
 	@Ignore
@@ -31,7 +31,7 @@ public class MyTestCase {
 	@Test
 	@Ignore
 	public void test2() {
-		for (Method m : ServerService.class.getDeclaredMethods()) {
+		for (Method m : Server_SampleService.class.getDeclaredMethods()) {
 			System.out.print(m.getName());
 			System.out.print("("+m.getParameterCount()+")");
 			System.out.println(": ");

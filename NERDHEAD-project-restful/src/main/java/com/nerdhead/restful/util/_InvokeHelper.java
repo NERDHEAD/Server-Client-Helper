@@ -9,7 +9,7 @@ import java.util.List;
 //TODO : MethodList 가져오는 기능 추가 할 것
 
 
-
+@Deprecated
 public class _InvokeHelper {
 
 	public <T> InvokeClassHelper<T> clazz(T service) {
